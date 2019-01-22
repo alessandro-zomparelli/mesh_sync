@@ -78,7 +78,7 @@ class OBJECT_PT_mesh_sync(bpy.types.Panel):
 
 def simple_export(ob, rec_path):
     mesh = ob.to_mesh(bpy.context.depsgraph, ob.sync_out_modifiers)
-    
+
     # save VERTICES
     v_list = []
     for v in mesh.vertices:
@@ -131,15 +131,19 @@ def simple_export(ob, rec_path):
     bpy.data.meshes.remove(mesh)
 
 def simple_import(ob, read_path):
-
+    separators = ("," , ";" , "Q", "T", "{", "}", "(", ")", "[", "]")
     read_path = bpy.path.abspath(read_path)
+    suffix = ("_vertices","_faces","_weight",".txt")
+    for s in suffix:
+        read_path = read_path.replace(s,"")
 
     # read vertices
     vertices = []
     with open(read_path + "_vertices.txt") as f:
         data = f.readlines()
         for line in data:
-            co = line.replace(';',' ').replace(',',' ').replace('}',' ').replace('{',' ').split()
+            for s in separators: line = line.replace(s," ")
+            co = line.split()
             co = tuple(float(n) for n in co)
             if len(co) == 3: vertices.append(Vector(co))
 
@@ -148,7 +152,8 @@ def simple_import(ob, read_path):
     with open(read_path + "_faces.txt") as f:
         data = f.readlines()
         for line in data:
-            verts = line.replace(';',' ').replace(',',' ').replace('Q{',' ').replace('}',' ').split()
+            for s in separators: line = line.replace(s," ")
+            verts = line.split()
             verts = tuple(int(n) for n in verts)
             if len(verts) > 2: faces.append(verts)
 
@@ -167,7 +172,8 @@ def simple_import(ob, read_path):
             first = True
             count = 0
             for line in data:
-                weight = line.replace(';',' ').replace(',',' ').split()
+                for s in separators: line = line.replace(s," ")
+                weight = line.split()
                 weight = tuple(float(n) for n in weight)
                 if first:
                     for i in range(len(weight)):
@@ -195,6 +201,11 @@ class import_mesh_data(bpy.types.Operator):
     bl_description = ("")
     bl_options = {'REGISTER', 'UNDO'}
 
+    @classmethod
+    def poll(cls, context):
+        try: return context.mode == 'OBJECT'
+        except: return False
+
     def execute(self, context):
         ob = bpy.context.object
         simple_import(ob, ob.sync_in_path)
@@ -205,6 +216,11 @@ class import_export_all(bpy.types.Operator):
     bl_label = "Sync All"
     bl_description = ("Import and export all meshes")
     bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        try: return context.mode == 'OBJECT'
+        except: return False
 
     def execute(self, context):
         for o in bpy.data.objects:
@@ -222,6 +238,11 @@ class import_all(bpy.types.Operator):
     bl_label = "Import All"
     bl_description = ("Import all meshes")
     bl_options = {'REGISTER', 'UNDO'}
+
+    @classmethod
+    def poll(cls, context):
+        try: return context.mode == 'OBJECT'
+        except: return False
 
     def execute(self, context):
         for o in bpy.data.objects:
@@ -262,7 +283,7 @@ def register():
     bpy.types.Object.sync_out_modifiers = bpy.props.BoolProperty(name = "Use Modifiers", description = "Apply Modifiers", default = False)
     bpy.types.Object.sync_out_weight = bpy.props.BoolProperty(name = "Vertex Groups", description = "Export Active Weight", default = False)
     bpy.types.Object.sync_out_path = bpy.props.StringProperty(name="", description="Recording Folder", subtype='FILE_PATH')
-    #bpy.types.Object.prop_read = bpy.props.BoolProperty(name = "Real-time Import", description = "Active realtime import", default = False)
+    bpy.types.Object.sync_smooth = bpy.props.BoolProperty(name = "Smooth", description = "Add Smooth Shading", default = False)
     bpy.types.Object.sync_in_path = bpy.props.StringProperty(name="", description="Reading Folder", subtype='FILE_PATH')
 
 def unregister():

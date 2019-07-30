@@ -58,5 +58,5 @@ Optionally, some values from 0 to 1 can be exported as well as Weight file. Make
 
 While importing three different components can be used, according to how much informations you want to import. The Advanced component allow to read all possible data.
 
-![GH Import](/GH_Import Example.jpg)
+![GH Import](/GH_Import%20Example.jpg)
 

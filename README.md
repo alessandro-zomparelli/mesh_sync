@@ -15,3 +15,7 @@ Optionally a third file can be created:
 //myMesh_weight.txt
 
 Containing on each line (for each Vertex) one value for each Vertex Group. (eg. "0.25 0.75")
+
+![GitHub Logo](/Blender_Import.jpg)
+
+![GitHub Logo](https://raw.githubusercontent.com/alessandro-zomparelli/mesh_sync/master/Blender_Import.jpg)

@@ -1,8 +1,11 @@
 # MeshSync
 
-After installing the python file mes_sync.py, MeshSync will appear in the Object Data panel, if a Mesh Object is selected. 
+MeshSync is commincation system that can be used in order to connect tools like Blender and GH via .txt files containigin the mesh information. This is an early version and a lot of things can be improved.
+It was mainly developed for connecting Blender and Grasshopper in order to take advantages fo the best qualities of both softwares, but feel free to report different uses of it for other tools that allow you to read or write information using .txt files.
 
 ## Blender
+
+After installing the python file mes_sync.py, MeshSync will appear in the Object Data panel, if a Mesh Object is selected. 
 
 ### Exporting
 Synchronize mesh object exporting or importing data as txt files. Chose a folder and a prefix name (eg. "//MyMesh_") and manually pres "Export".

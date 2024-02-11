@@ -13,8 +13,8 @@
 bl_info = {
     "name": "Mesh Sync",
     "author": "Alessandro Zomparelli (Co-de-iT)",
-    "version": (0, 0, 4),
-    "blender": (2, 80, 0),
+    "version": (1, 0, 0),
+    "blender": (4, 0, 2),
     "location": "",
     "description": "Save/read mesh data to external files",
     "warning": "",
@@ -111,8 +111,6 @@ def simple_export(ob, rec_path):
     dg = bpy.context.evaluated_depsgraph_get()
     ob_eval = ob.evaluated_get(dg) if ob.sync_out_modifiers else ob
     mesh = bpy.data.meshes.new_from_object(ob_eval, preserve_all_data_layers=True, depsgraph=dg)
-    mesh.calc_normals()
-    #mesh = ob.to_mesh(bpy.context.depsgraph, ob.sync_out_modifiers)
 
     # save VERTICES
     v_list = []
